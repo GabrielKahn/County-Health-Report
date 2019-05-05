@@ -1,0 +1,23 @@
+---
+title: "CHR Data"
+author: "Gabriel Kahn"
+date: "May 5, 2019"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+CHR_data <- read_csv("CHR_data.csv")
+
+```
+# Introduction
+
+
+
+# Tidying Data
+
+```{r}
+CHR_data <- CHR_data[-c(1),]
+# remove the redundant first row
+CHR_data
+```
