@@ -13,26 +13,63 @@ CHR_data <- read_csv("CHR_data.csv")
 ```
 # Introduction
 
-This report is intended to be the first step in a larger project analyzing how health and economic factors influence US presidential elections. Here, I will use data collected from County Health Rankings and Roadmaps, an organization formed as a partnership between the Robert Wood Johnson Foundation and the University of Wisconsin Population Health Institute. The purpose here is exploratory; the hope is to gain a more nuanced look at the nation's health at a county level, with a particular focus on swing states. Looking ahead, I hope to collect data on election results by county to see if health factors relate to election outcomes.
+This report is intended to be the first step in a larger project analyzing how health and economic factors influence US presidential elections. Here, I will use data collected from County Health Rankings and Roadmaps, an organization formed as a partnership between the Robert Wood Johnson Foundation and the University of Wisconsin Population Health Institute. The purpose here is exploratory; the hope is to gain a more nuanced look at the nation's health at a county level, with a particular focus on swing states. As the data set contains information for only one year, 2018, I cannot make time comparisons to get a sense of whether or not conditions are getting better or worse. Instead, I can compare states and counties to find pockets of areas which may be facing health crises. Looking ahead, I hope to collect data on election results by county to see if health factors relate to election outcomes.
 
 
 # Tidying Data
+ 
+Here I tidy the data. Only run this section once, if you need to adjust it, clear
 
 ```{r}
-CHR_data <- CHR_data[-c(1),]
+
+
+rm(list = ls(all.names = TRUE))
+# Clears environment so the remove function doesnt canibalize the data set
+CHR_data <- read_csv("CHR_data.csv")
+CHR_data <- CHR_data[-c(1) , ]
 # remove the redundant first row
-CHR_data <-  CHR_data %>%
+CHR_data <-
    data.frame(lapply(CHR_data, trimws), stringsAsFactors = FALSE) 
 # Take spaces out of column names
-CHR_data_num <- CHR_data                           # Replicate data
-CHR_data_num[ , 8:100] <- as.data.frame(   # Recode characters as numeric
-  apply(CHR_data_num[ , 8:100], 2, as.numeric))
-
-CHR_data_num                 
+CHR_data_num <- CHR_data                           
+# Replicate data
+CHR_data_num[ , 8:508] <- as.data.frame(   
+    apply(CHR_data_num[ , 8:508], 2, as.numeric))
+# Recode characters as numeric
+States_data <- CHR_data_num[-c(1) , ] %>%
+  filter(County.FIPS.Code == "000")
+# Create data frame to for state wide comparison, removing first row for the whole country
 ```
+
+# Statewide Analysis
+
+I would like to begin this health report by taking a broader state comparison across numerous health categories.
+
+## Nutrition
+
+The County Health Rankings data set includes the Food Environment Index, a measurement broadly ranking a place's access to healthy food options. It takes into account several factors including income, proximity to grocery stores, and other measures which determine whether a population has access to healthy food options.
+
+A population's nutrition levels can predict a wide variety of other health measures, from obesity rates to mental health, even premature death rates. 
 
 ```{r}
 
-CHR_data %>%
 
+States_data %>% 
+  ggplot(aes(reorder(State.Abbreviation, Food.environment.index.raw.value), Food.environment.index.raw.value)) +
+  geom_col()+
+  theme(axis.text.x = element_text(face="bold", 
+                           size=8, angle=90, vjust = -.05)) 
+
+```
+
+Looking at the above chart
+
+```{r}
+
+Bama_data <- CHR_data[ , 1:100] %>%
+filter(State.Abbreviation == "AL")
+
+ggplot(Bama_data, aes(x = Poor.physical.health.days.raw.value, y = Poor.mental.health.days.raw.value )) +
+  geom_point()
   
+```
