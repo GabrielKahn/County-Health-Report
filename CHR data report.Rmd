@@ -18,7 +18,7 @@ This report is intended to be the first step in a larger project analyzing how h
 
 # Tidying Data
  
-Here I tidy the data. Only run this section once, if you need to adjust it, clear
+Here I tidy the data.
 
 ```{r}
 
@@ -39,13 +39,18 @@ CHR_data_num[ , 8:508] <- as.data.frame(
 States_data <- CHR_data_num[-c(1) , ] %>%
   filter(County.FIPS.Code == "000")
 # Create data frame to for state wide comparison, removing first row for the whole country
+swing_states_county <- CHR_data_num %>% 
+  filter(State.Abbreviation == "CO" | State.Abbreviation == "FL" | State.Abbreviation == "IO"| State.Abbreviation == "MI"| State.Abbreviation == "MN"| State.Abbreviation == "NH" | State.Abbreviation == "NC" | State.Abbreviation == "NV" | State.Abbreviation == "OH"| State.Abbreviation == "PA"| State.Abbreviation == "VA")
+
+swing_states <- swing_states_county %>% 
+  filter(County.FIPS.Code == "000")
 ```
 
-# Statewide Analysis
+# Nutrition
 
 I would like to begin this health report by taking a broader state comparison across numerous health categories.
 
-## Nutrition
+## Statewide Nutrition Analysis
 
 The County Health Rankings data set includes the Food Environment Index, a measurement broadly ranking a place's access to healthy food options. It takes into account several factors including income, proximity to grocery stores, and other measures which determine whether a population has access to healthy food options.
 
@@ -53,23 +58,50 @@ A population's nutrition levels can predict a wide variety of other health measu
 
 ```{r}
 
-
 States_data %>% 
   ggplot(aes(reorder(State.Abbreviation, Food.environment.index.raw.value), Food.environment.index.raw.value)) +
-  geom_col()+
+  geom_col(fill = "blue") +
+  theme_minimal() +
   theme(axis.text.x = element_text(face="bold", 
-                           size=8, angle=90, vjust = -.05)) 
+                           size=8, angle=90, vjust = -.05)) +
+    labs(x = "State", y = "Food Environment Index", title = "Statewide Nutrition Index" )
 
 ```
 
-Looking at the above chart
+The above chart gives a broad ranking of states based on their nutrition level. It shows that there is a rather large disparity between Mississippi and even states in the middle of the distribution. Further questions are also raised as to why some states are so poor in this regard. Is it that most of the states at the bottom are warm whether states? Does being a largely rural state influence access to food? Perhaps it is also the case that there are county disparities within states; for example richer areas in New York  may mask poor food indexes in other parts of the state.
+
+Nonetheless, this chart will be helpful in future analysis, particularly when looking to see if swing states have similar charactoristics when it comes to health.
+
+
+
+## County Nutrition Analysis
+
+Going off the previous
+
 
 ```{r}
+NY_data <- CHR_data_num %>% 
+  filter(State.Abbreviation == "NY")
 
-Bama_data <- CHR_data[ , 1:100] %>%
-filter(State.Abbreviation == "AL")
+ggplot(NY_data, aes(reorder(Name, Food.environment.index.raw.value), Food.environment.index.raw.value)) +
+  geom_col(fill = "red") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(face="bold", 
+                           size=8, angle=90, vjust = -.05)) +
+    labs(x = "County", y = "Food Environment Index", title = "New York County Nutrition Index" )
 
-ggplot(Bama_data, aes(x = Poor.physical.health.days.raw.value, y = Poor.mental.health.days.raw.value )) +
-  geom_point()
-  
+```
+
+
+```{r}
+MI_data <- CHR_data_num %>% 
+  filter(State.Abbreviation == "MI")
+
+ggplot(NM_data, aes(reorder(Name, Food.environment.index.raw.value), Food.environment.index.raw.value)) +
+  geom_col(fill = "red") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(face="bold", 
+                           size= 6, angle=90, vjust = -.05)) +
+    labs(x = "County", y = "Food Environment Index", title = "Michigan County Nutrition Index" )
+
 ```
