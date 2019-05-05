@@ -7,11 +7,13 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 library(tidyverse)
+library(stringr)
 CHR_data <- read_csv("CHR_data.csv")
 
 ```
 # Introduction
 
+This report is intended to be the first step in a larger project analyzing how health and economic factors influence US presidential elections. Here, I will use data collected from County Health Rankings and Roadmaps, an organization formed as a partnership between the Robert Wood Johnson Foundation and the University of Wisconsin Population Health Institute. The purpose here is exploratory; the hope is to gain a more nuanced look at the nation's health at a county level, with a particular focus on swing states. Looking ahead, I hope to collect data on election results by county to see if health factors relate to election outcomes.
 
 
 # Tidying Data
@@ -19,5 +21,18 @@ CHR_data <- read_csv("CHR_data.csv")
 ```{r}
 CHR_data <- CHR_data[-c(1),]
 # remove the redundant first row
-CHR_data
+CHR_data <-  CHR_data %>%
+   data.frame(lapply(CHR_data, trimws), stringsAsFactors = FALSE) 
+# Take spaces out of column names
+CHR_data_num <- CHR_data                           # Replicate data
+CHR_data_num[ , 8:100] <- as.data.frame(   # Recode characters as numeric
+  apply(CHR_data_num[ , 8:100], 2, as.numeric))
+
+CHR_data_num                 
 ```
+
+```{r}
+
+CHR_data %>%
+
+  
