@@ -2,7 +2,7 @@
 title: "County Health Report"
 author: "Gabriel Kahn"
 date: "May 5, 2019"
-output: pdf_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
@@ -16,11 +16,8 @@ CHR_data <- read_csv("CHR_data.csv")
 This report is intended to be the first step in a larger project analyzing how health and economic factors influence US presidential elections. Here, I will use data collected from County Health Rankings and Roadmaps, an organization formed as a partnership between the Robert Wood Johnson Foundation and the University of Wisconsin Population Health Institute. The purpose here is exploratory; the hope is to gain a more nuanced look at the nation's health at a county level, with a particular focus on swing states. As the data set contains information for only one year, 2018, I cannot make time comparisons to get a sense of whether or not conditions are getting better or worse. Instead, I can compare states and counties to find pockets of areas which may be facing health crises. Looking ahead, I hope to collect data on election results by county to see if health factors relate to election outcomes.
 
 
-# Tidying Data
- 
-Here I tidy the data.
 
-```{r}
+```{r, include = FALSE}
 rm(list = ls(all.names = TRUE))
 # Clears environment so the remove function doesnt canibalize the data set
 CHR_data <- read_csv("CHR_data.csv")
@@ -58,14 +55,14 @@ The County Health Rankings data set includes the Food Environment Index, a measu
 
 A population's nutrition levels can predict a wide variety of other health measures, from obesity rates to mental health, even premature death rates. 
 
-```{r}
+```{r, echo = FALSE}
 
 States_data %>% 
   ggplot(aes(reorder(State.Abbreviation, Food.environment.index.raw.value), Food.environment.index.raw.value)) +
   geom_col(fill = "blue") +
   theme_minimal() +
-  theme(axis.text.x = element_text(face="bold", 
-                           size=8, angle=90, vjust = -.05)) +
+  theme(axis.text.x = element_text(face = "bold", 
+                           size = 8, angle = 90, vjust = -.05)) +
     labs(x = "State", y = "Food Environment Index", title = "Statewide Nutrition Index" )
 
 ```
@@ -83,7 +80,7 @@ In order to see the variation within the states, we will perform the same operat
 ### New York County Nutrition Analysis
 
 
-```{r}
+```{r, echo = FALSE}
 NY_data <- CHR_data_num %>% 
   filter(State.Abbreviation == "NY")
 
@@ -104,7 +101,7 @@ While overall New York State has a high Nutrition Index at around 8.75, most cou
 As New York is a large state with a large variety of county demographics. We saw from above that most of the counties fall below the state mean for the Food Environment Index. In the below graph, we look at the relationship between child poverty rates and drug overdose deaths by county. For clarity, overlapping values are removed. Drug overdoses are the number of deaths from overdose over a three-year period, per 100,000 people.
 
 
-```{r}
+```{r, echo = FALSE}
 ggplot(NY_data, aes(Children.in.poverty.raw.value, Drug.overdose.deaths.raw.value, label = Name))+
   geom_point() +
   geom_text(size = 3, label.padding = 2, check_overlap = TRUE) +
@@ -126,7 +123,7 @@ For comparison, let's look at data from Michigan. Michigan is an interesting Sta
 
 ### Michigan County Nutrition Index
 
-```{r}
+```{r, echo = FALSE}
 MI_data <- CHR_data_num %>% 
   filter(State.Abbreviation == "MI")
 
@@ -143,7 +140,7 @@ Michigan's Nutrition Index is distributed quite differently from New York's. Unl
 
 ### Michigan County Social Ills
 
-```{r}
+```{r, echo = FALSE}
 ggplot(MI_data, aes(Children.in.poverty.raw.value, Drug.overdose.deaths.raw.value, label = Name))+
   geom_point() +
   geom_text(size = 3, label.padding = 2, check_overlap = TRUE) +
@@ -164,7 +161,7 @@ Here we will take a look at these same social factors, but with a larger focus o
 
 ## Drug Overdoses in Swing States Versus National Median
 
-```{r}
+```{r, echo = FALSE}
 ggplot(swing_states_US, aes(reorder(State.Abbreviation, Drug.overdose.deaths.raw.value), Drug.overdose.deaths.raw.value, fill = State.Abbreviation)) +
   geom_boxplot() +
   theme_minimal() +
@@ -176,7 +173,7 @@ From the above chart we that for all swing states, with the exception on Minneso
 
 ## Child Poverty in Swing States Versus National Median
 
-```{r}
+```{r, echo = FALSE}
 ggplot(swing_states_US, aes(reorder(State.Abbreviation, Children.in.poverty.raw.value), Children.in.poverty.raw.value, fill = State.Abbreviation)) +
   geom_boxplot() +
   theme_minimal() +
@@ -190,9 +187,13 @@ Concerning child poverty, most of the states observed fall close to the national
 
 # Conclusion
 
+While not any sort of comprehensive analysis, this initial report is the beginning of what will hopefully be fruitful research. The code used to generate these graphs can be modified further to reveal more inner and outer state trends. Being that the dataset used has 508 variables, there is potential to find more meaningful relationships within the data.
 
+As it stands currently, we have identified states which lag behind in proper nutrition. In the future, we will look to see if this deficiency shows up in other areas such as mental health or obesity rates. We have also shown how counties within states greatly differ in quality of life. With more nuanced information, we can better understand how populations within states do not neccessarily live under similar conditions.
 
-# Meta Thoughts Regarding the Assignment
+Looking forward, I hope to unite this data set with electoral data and also to visualize it inside of an interactive map.
+
+## Meta Thoughts Regarding the Assignment
 
 This assignment showed me the power of R and how far my abilities have come along this quarter. Searching for just the right data set took a while, but in my search I discovered just how much information there is available. It is quite amazing that by knowing R, I have the tools to analyze information in ways that I could not before.
 
