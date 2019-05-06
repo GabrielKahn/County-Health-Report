@@ -76,7 +76,9 @@ Nonetheless, this chart will be helpful in future analysis, particularly when lo
 
 ## County Nutrition Analysis
 
-Going off the previous
+In order to see the variation within the states, we will perform the same operation, this time using the counties as the point of analysis.
+
+### New York County Nutrition Analysis
 
 
 ```{r}
@@ -92,6 +94,7 @@ ggplot(NY_data, aes(reorder(Name, Food.environment.index.raw.value), Food.enviro
 
 ```
 
+While overall New York State has a high Nutrition Inndex at around 8.75, most counties fall short of this measure. Since the state mean is so much higher than the median county index, this hints that the counties whose values lie higher may have large populations which give them greater pull. Five counties have values higher than the mean, Nassau, Suffolk, Putnam, Westchester, and Richmond. Geographically, these counties closely border New York City, which may indicate higher levels of wealth.
 
 ```{r}
 MI_data <- CHR_data_num %>% 
