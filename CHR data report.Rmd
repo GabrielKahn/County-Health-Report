@@ -38,10 +38,14 @@ States_data <- CHR_data_num[-c(1) , ] %>%
   filter(County.FIPS.Code == "000")
 # Create data frame to for state wide comparison, removing first row for the whole country
 swing_states_county <- CHR_data_num %>% 
-  filter(State.Abbreviation == "CO" | State.Abbreviation == "FL" | State.Abbreviation == "IO"| State.Abbreviation == "MI"| State.Abbreviation == "MN"| State.Abbreviation == "NH" | State.Abbreviation == "NC" | State.Abbreviation == "NV" | State.Abbreviation == "OH"| State.Abbreviation == "PA"| State.Abbreviation == "VA")
-
+  filter(State.Abbreviation == "CO" | State.Abbreviation == "FL" | State.Abbreviation == "IO" | State.Abbreviation == "MI"| State.Abbreviation == "MN"| State.Abbreviation == "NH" | State.Abbreviation == "NC" | State.Abbreviation == "NV" | State.Abbreviation == "OH"| State.Abbreviation == "PA"| State.Abbreviation == "VA")
+# Swing States with Counties
 swing_states <- swing_states_county %>% 
   filter(County.FIPS.Code == "000")
+# Just Swing States
+swing_states_US <- CHR_data_num %>% 
+  filter(State.Abbreviation == "CO" | State.Abbreviation == "FL" | State.Abbreviation == "IO"| State.Abbreviation == "MI" | State.Abbreviation == "MN"| State.Abbreviation == "NH" | State.Abbreviation == "NC" | State.Abbreviation == "NV" | State.Abbreviation == "OH"| State.Abbreviation == "PA"| State.Abbreviation == "VA" | State.Abbreviation == "US")
+#Swing States with US included
 ```
 
 # Nutrition
@@ -107,7 +111,8 @@ ggplot(NY_data, aes(Children.in.poverty.raw.value, Drug.overdose.deaths.raw.valu
   # Adds Geom text, removes overlapping values for clarity
   theme_minimal() +
    labs(x = "Child Poverty Rate", y = "Drug Overdoses per 100,000", title = "New York Counties by Child Poverty and Drug Overdose" ) +
-geom_smooth()
+geom_smooth() +
+   scale_x_continuous(labels = scales::percent)
   
 ```
 
@@ -125,7 +130,7 @@ For comparison, let's look at data from Michigan. Michigan is an interesting Sta
 MI_data <- CHR_data_num %>% 
   filter(State.Abbreviation == "MI")
 
-ggplot(NM_data, aes(reorder(Name, Food.environment.index.raw.value), Food.environment.index.raw.value)) +
+ggplot(MI_data, aes(reorder(Name, Food.environment.index.raw.value), Food.environment.index.raw.value)) +
   geom_col(fill = "red") +
   theme_minimal() +
   theme(axis.text.x = element_text(face="bold", 
@@ -145,27 +150,42 @@ ggplot(MI_data, aes(Children.in.poverty.raw.value, Drug.overdose.deaths.raw.valu
   # Adds Geom text, removes overlapping values for clarity
   theme_minimal() +
    labs(x = "Child Poverty Rate", y = "Drug Overdoses per 100,000", title = "Michigan Counties by Child Poverty and Drug Overdose" ) +
-  geom_smooth()
+  geom_smooth() +
+  scale_x_continuous(labels = scales::percent)
   
 
 ```
 
 The distribution on this chart shows a strong correlation between poverty and drug deaths. The points are positioned generally higher than they are in the New York graph, although the counties in Upstate New York fall around where most of Michigan's points lie, showing a Rust Belt connection.
 
-# Associations of Social Factors
+# Social Factors in Swing States
+
+Here we will take a look at these same social factos, but with a larger focus on swing states in particular
+
+## Drug Overdoses in Swing States Versus National Median
 
 ```{r}
-ggplot(swing_states_county, aes(State.Abbreviation, Drug.overdose.deaths.raw.value, fill = State.Abbreviation))+
+ggplot(swing_states_US, aes(reorder(State.Abbreviation, Drug.overdose.deaths.raw.value), Drug.overdose.deaths.raw.value, fill = State.Abbreviation)) +
   geom_boxplot() +
   theme_minimal() +
-   labs(x = "Swing State", y = "Drug Overdoses per 100,000", title = "Drug Overdoses in Swing States" ) +
-  theme(legend.position="none")
+   labs(x = "Swing States", y = "Drug Overdoses per 100,000", title = "Drug Overdoses in Swing States" ) +
+  theme(legend.position = "none")
 ```
 
+From the above chart we that for all swing states, with the exception on Minnesota, the median county overdose rate lies near or above the national median. From the data it appears that Northeastern states, such as New Hampshire, Ohio, and Pennslavania, have particularly high overdose rates. However, Colorado has the highest outliers.
+
+## Child Poverty in Swing States Versus National Median
+
 ```{r}
-ggplot(swing_states_county, aes(State.Abbreviation, Children.in.poverty.raw.value, fill = State.Abbreviation))+
+ggplot(swing_states_US, aes(reorder(State.Abbreviation, Children.in.poverty.raw.value), Children.in.poverty.raw.value, fill = State.Abbreviation)) +
   geom_boxplot() +
   theme_minimal() +
-   labs(x = "Swing State", y = "Child Poverty Rate", title = "Child Poverty in Swing States in Swing States" ) +
-  theme(legend.position="none")
+   labs(x = "Swing States", y = "Child Poverty Rate", title = "Child Poverty in Swing States in Swing States" ) +
+  theme(legend.position = "none") + 
+  scale_y_continuous(labels = scales::percent)
 ```
+
+Concerning child poverty, most of the states observed fall close to the national median, with New Hampshire significantly below. This is interesting because New Hampshire has both the lowest median childhood poverty rates and the highest median drug overdose rate. Also of interest is that although the median poverty rates are generally similar to the national level, the upper quartiles for many spread up to 10% higher.
+
+# Conclusion
+
