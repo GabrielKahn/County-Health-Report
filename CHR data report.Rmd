@@ -18,7 +18,7 @@ This report is intended to be the first step in a larger project analyzing how h
 
 
 ```{r, include = FALSE}
-# Tidying data
+# Tidying the data
 rm(list = ls(all.names = TRUE))
 # Clears environment so the remove function doesnt canibalize the data set
 CHR_data <- read_csv("CHR_data.csv")
