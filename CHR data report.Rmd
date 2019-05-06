@@ -160,7 +160,7 @@ The distribution on this chart shows a strong correlation between poverty and dr
 
 # Social Factors in Swing States
 
-Here we will take a look at these same social factos, but with a larger focus on swing states in particular
+Here we will take a look at these same social factors, but with a larger focus on swing states.
 
 ## Drug Overdoses in Swing States Versus National Median
 
@@ -172,7 +172,7 @@ ggplot(swing_states_US, aes(reorder(State.Abbreviation, Drug.overdose.deaths.raw
   theme(legend.position = "none")
 ```
 
-From the above chart we that for all swing states, with the exception on Minnesota, the median county overdose rate lies near or above the national median. From the data it appears that Northeastern states, such as New Hampshire, Ohio, and Pennslavania, have particularly high overdose rates. However, Colorado has the highest outliers.
+From the above chart we that for all swing states, with the exception on Minnesota, the median county overdose rate lies near or above the national median. From the data it appears that Northeastern states, such as New Hampshire, Ohio, and Pennsylvania, have particularly high overdose rates. However, Colorado has the highest outliers.
 
 ## Child Poverty in Swing States Versus National Median
 
@@ -187,5 +187,18 @@ ggplot(swing_states_US, aes(reorder(State.Abbreviation, Children.in.poverty.raw.
 
 Concerning child poverty, most of the states observed fall close to the national median, with New Hampshire significantly below. This is interesting because New Hampshire has both the lowest median childhood poverty rates and the highest median drug overdose rate. Also of interest is that although the median poverty rates are generally similar to the national level, the upper quartiles for many spread up to 10% higher.
 
+
 # Conclusion
+
+
+
+# Meta Thoughts Regarding the Assignment
+
+This assignment showed me the power of R and how far my abilities have come along this quarter. Searching for just the right data set took a while, but in my search I discovered just how much information there is available. It is quite amazing that by knowing R, I have the tools to analyze information in ways that I could not before.
+
+I enjoyed the independence this homework afforded me as well. It feels good to be on my own to find data that interests me, and it feels even better to know that I can find random data online and make sense of it. There were several parts of the data which needed cleaning. Previously this would have taken me a while to do so, but now I understand better the different ways data is classified and also how to manipulate it into other forms.
+
+I also learned the importance of finding credible data. There was another set of data which I wanted to use, and even uploaded, but upon further examination I was not sure if it was repudable enough.
+
+The next step in my path is to find county voting data, and then to see if I can unite it with the set I used for this exercise.
 
