@@ -109,7 +109,6 @@ ggplot(NY_data, aes(Children.in.poverty.raw.value, Drug.overdose.deaths.raw.valu
    labs(x = "Child Poverty Rate", y = "Drug Overdoses per 100,000", title = "New York Counties by Child Poverty and Drug Overdose" ) +
 geom_smooth()
   
-
 ```
 
 Unsurprisingly the five counties with higher than mean Food Environment Indexes have low child poverty rates. What is more interesting is that drug overdose rates seem to be correlated with the counties in Upstate New York. Kings County (Brooklyn) and Bronx County have relatively low death rates when compared to more northern regions in the state. This may be due to the fact that Upstate New York is part of the Rust Belt.
@@ -119,6 +118,8 @@ Looking at the regression line, there is not the expected strong positive correl
 ## Michigan County Analysis
 
 For comparison, let's look at data from Michigan. Michigan is an interesting State for comparison. For one thing, like Upstate New York, it is part of the Rust Belt. Also, it is traditionally a "swing state" during presidential elections, therefore it is important to understand what is going on socially and economically.
+
+### Michigan County Nutrition Index
 
 ```{r}
 MI_data <- CHR_data_num %>% 
@@ -135,6 +136,8 @@ ggplot(NM_data, aes(reorder(Name, Food.environment.index.raw.value), Food.enviro
 
 Michigan's Nutrition Index is distributed quite differently from New York's. Unlike New York, the mean score is significantly lower than the median county. This may be an indicator that the more populated areas of Michigan are socioeconomically worse off than the more populated areas of New York, which makes sense intuitively knowing the troubles Detroit has undergone in the past century.
 
+### Michigan County Social Ills
+
 ```{r}
 ggplot(MI_data, aes(Children.in.poverty.raw.value, Drug.overdose.deaths.raw.value, label = Name))+
   geom_point() +
@@ -148,3 +151,21 @@ ggplot(MI_data, aes(Children.in.poverty.raw.value, Drug.overdose.deaths.raw.valu
 ```
 
 The distribution on this chart shows a strong correlation between poverty and drug deaths. The points are positioned generally higher than they are in the New York graph, although the counties in Upstate New York fall around where most of Michigan's points lie, showing a Rust Belt connection.
+
+# Associations of Social Factors
+
+```{r}
+ggplot(swing_states_county, aes(State.Abbreviation, Drug.overdose.deaths.raw.value, fill = State.Abbreviation))+
+  geom_boxplot() +
+  theme_minimal() +
+   labs(x = "Swing State", y = "Drug Overdoses per 100,000", title = "Drug Overdoses in Swing States" ) +
+  theme(legend.position="none")
+```
+
+```{r}
+ggplot(swing_states_county, aes(State.Abbreviation, Children.in.poverty.raw.value, fill = State.Abbreviation))+
+  geom_boxplot() +
+  theme_minimal() +
+   labs(x = "Swing State", y = "Child Poverty Rate", title = "Child Poverty in Swing States in Swing States" ) +
+  theme(legend.position="none")
+```
